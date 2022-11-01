@@ -1,0 +1,11 @@
+{
+    "name": "hasib/blog",
+    "autoload": {
+        "psr-4": {
+            "kitchen\\": "./Class"
+        }
+    },
+    "require": {
+        "ext-pdo": "*"
+    }
+}
