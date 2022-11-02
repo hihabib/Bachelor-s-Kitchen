@@ -97,7 +97,12 @@ class User extends Connect
         $statement -> bindValue('email', filter_var($user_data['user'], FILTER_VALIDATE_EMAIL));
         $statement -> bindValue('password', md5($user_data['password']));
         $statement -> execute();
-        return $this->get_user_id_by_email($user_data['user']);
+        if(count($statement -> fetchAll(PDO::FETCH_ASSOC))) {
+            return $this->get_user_id_by_email($user_data['user']);
+        } else {
+            return '';
+        }
+
     }
 
     public function auth_with_username($user_data) : string
@@ -106,7 +111,11 @@ class User extends Connect
         $statement -> bindValue('username', Validate::validate_string($user_data['user']));
         $statement -> bindValue('password', md5($user_data['password']));
         $statement -> execute();
-        return $this->get_user_id_by_username($user_data['user']);
+        if(count($statement ->fetchAll(PDO::FETCH_ASSOC))) {
+            return $this->get_user_id_by_username($user_data['user']);
+        } else {
+            return '';
+        }
     }
 
 

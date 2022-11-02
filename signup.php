@@ -3,10 +3,7 @@
 
 require_once 'header.php';
 
-
 ?>
-
-
 <main class="container mt-4">
     <div class="h4">Sign Up</div>
     <form action="actions/register.php" method="post">
