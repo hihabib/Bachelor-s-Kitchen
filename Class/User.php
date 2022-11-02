@@ -3,7 +3,7 @@
 namespace kitchen;
 use PDO;
 
-session_start();
+
 
 class User extends Connect
 {

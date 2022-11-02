@@ -27,4 +27,13 @@ class Validate extends Connect
         $statement -> execute();
         return (bool) $statement -> fetch(PDO::FETCH_ASSOC);
     }
+
+    public static function is_user_logged_in() : bool
+    {
+        if(isset($_SESSION['user_id'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

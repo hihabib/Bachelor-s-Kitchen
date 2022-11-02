@@ -2,7 +2,7 @@
 
 namespace kitchen;
 use PDO, kitchen\User;
-
+session_start();
 class Connect {
     public PDO $pdo;
     protected string $dbname;
