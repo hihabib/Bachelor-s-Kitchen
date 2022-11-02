@@ -1,11 +1,9 @@
 <?php
-session_start();
+
 
 require_once 'header.php';
 
-if(isset($_SESSION['user_id'])){
-    echo $_SESSION['user_id'];
-}
+
 ?>
 
 
@@ -20,7 +18,7 @@ if(isset($_SESSION['user_id'])){
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input name="username" type="text" class="form-control" id="username">
-            <div id="emailHelp" class="form-text">You will need this at the time of sign in and recover your password</div>
+            <div class="form-text">You will need this at the time of sign in and recover your password</div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>

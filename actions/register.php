@@ -2,15 +2,15 @@
 session_start();
 
 require_once '../vendor/autoload.php';
-$connect = new \kitchen\Connect();
+$user = new \kitchen\User();
 
 if($_POST['password'] !== $_POST['repeat_password']){
     header("Location: /signup.php?failed=Password%20is%20not%20matched");
 } else {
-    $response = $connect -> user_signup($_POST);
+    $response = $user -> user_signup($_POST);
     switch ($response['error']) {
         case 'none':
-            $_SESSION['user_id'] = $response['id'];
+            $user->user_session($response['id']);
             header("Location: /?reg=success");
             break;
         case 'username already exists':

@@ -3,14 +3,14 @@ require_once 'header.php';
 ?>
 <main class="container mt-4">
     <div class="h4">Sign Up</div>
-    <form>
+    <form action="actions/authenticate.php" method="post">
         <div class="mb-3">
             <label for="userID" class="form-label">Email address or Username</label>
-            <input type="text" class="form-control" id="userID">
+            <input type="text" name="user" class="form-control" id="userID">
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password">
+            <input type="password" name="password" class="form-control" id="password">
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
     </form>

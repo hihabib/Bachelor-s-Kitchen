@@ -1,4 +1,7 @@
-<!doctype html>
+<?php
+require_once './vendor/autoload.php';
+$user_data = new \kitchen\User();
+?><!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -13,8 +16,19 @@
         <a href="/" class="col-md-6 logo text-4 h3">Bachelor's kitchen</a>
         <div class="offset-md-4 col-md-2">
             <div class="d-flex justify-content-between">
-                <a href="login.php" class="btn btn-primary">Login</a>
-                <a href="signup.php" class="btn btn-danger">Sign Up</a>
+                <?php
+                if(!isset($_SESSION['user_id'])) : ?>
+                    <div>
+                        <a href="login.php" class="btn btn-primary">Login</a>
+                        <a href="signup.php" class="btn btn-danger">Sign Up</a>
+                    </div>
+                <?php else: ?>
+                    <div>
+                        <span>Hello, <?php echo $user_data->get_username($_SESSION['user_id']); ?></span>
+                        <a href="actions/logout.php" class="btn btn-danger">Logout</a>
+                    </div>
+               <?php endif;  ?>
+
             </div>
         </div>
     </div>
