@@ -36,4 +36,15 @@ class Validate extends Connect
             return false;
         }
     }
+    public function is_admin() : bool
+    {
+        if(self::is_user_logged_in()){
+            $role = $this -> pdo -> prepare("SELECT role FROM $this->user_table WHERE id = :id");
+            $role -> bindValue('id', User::get_user_id());
+            $role -> execute();
+            return $role -> fetch(PDO::FETCH_COLUMN) === 'admin';
+        } else {
+            return false;
+        }
+    }
 }

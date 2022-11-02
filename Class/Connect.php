@@ -10,6 +10,7 @@ class Connect {
     protected string $meal_table;
     protected string $today;
     public function __construct() {
+        date_default_timezone_set("Asia/Dhaka");
         $this -> dbname = Config::$dbname;
         $this -> user_table = Config::$user_table;
         $this -> pdo = new PDO("mysql:host=localhost;dbname=$this->dbname", "root", "root");
@@ -33,7 +34,5 @@ class Connect {
             $insert_meal_date -> bindValue('dinner', json_encode($user_array));
             $insert_meal_date -> execute();
         }
-
-
     }
 }

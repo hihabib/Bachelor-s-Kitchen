@@ -3,8 +3,6 @@
 namespace kitchen;
 use PDO;
 
-
-
 class User extends Connect
 {
     public function __construct()
@@ -21,6 +19,7 @@ class User extends Connect
     {
         return (int)$_SESSION['user_id'];
     }
+
     public function get_all_user_id() : array
     {
         $users = $this -> pdo -> prepare("SELECT id FROM $this->user_table ORDER BY id");
@@ -85,16 +84,14 @@ class User extends Connect
 
         if($email){
             // register user
-            $register = $this -> pdo -> prepare("INSERT INTO $this->user_table (username, password, email, registered_at) VALUES (:username, :password, :email, :registered_at)");
+            $register = $this -> pdo -> prepare("INSERT INTO $this->user_table (username, password, email, registered_at, role) VALUES (:username, :password, :email, :registered_at, :role)");
 
             $register -> bindValue('username', $username);
             $register -> bindValue('password', $password);
             $register -> bindValue('email', $email);
+            $register -> bindValue('role', 'member');
             $register -> bindValue('registered_at', date('Y-m-d H:i:s'));
             $register -> execute();
-
-
-
 
             return ['error' => 'none','id'=> $this->get_user_id_by_email($email)];
         } else {

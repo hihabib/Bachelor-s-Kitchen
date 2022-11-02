@@ -1,6 +1,10 @@
 <?php
 require_once './vendor/autoload.php';
-$user_data = new \kitchen\User();
+use kitchen\User,
+    kitchen\Validate;
+
+$user = new User();
+$validate = new Validate();
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -13,7 +17,10 @@ $user_data = new \kitchen\User();
 <body>
 <header class="container mt-3">
     <div class="row">
-        <a href="/" class="col-md-6 logo text-4 h3">Bachelor's kitchen</a>
+        <div class="col-md-6">
+            <a href="/" class="logo text-4 h3">Bachelor's kitchen</a>
+            <?php if($validate -> is_admin()) : ?><a href="/cpanel.php" class="btn btn-dark">Cpanel</a> <?php endif; ?>
+        </div>
         <div class="offset-md-4 col-md-2">
             <div class="d-flex justify-content-between">
                 <?php
@@ -24,7 +31,7 @@ $user_data = new \kitchen\User();
                     </div>
                 <?php else: ?>
                     <div>
-                        <span>Hello, <?php echo $user_data->get_username($_SESSION['user_id']); ?></span>
+                        <span>Hello, <?php echo $user->get_username($_SESSION['user_id']); ?></span>
                         <a href="actions/logout.php" class="btn btn-danger">Logout</a>
                     </div>
                <?php endif;  ?>
