@@ -17,10 +17,16 @@ class User extends Connect
         $_SESSION['user_id'] = $id;
     }
 
-    public static function get_user_id(){
-        return $_SESSION['user_id'];
+    public static function get_user_id() : int
+    {
+        return (int)$_SESSION['user_id'];
     }
-
+    public function get_all_user_id() : array
+    {
+        $users = $this -> pdo -> prepare("SELECT id FROM $this->user_table ORDER BY id");
+        $users -> execute();
+        return $users -> fetchAll(PDO::FETCH_COLUMN);
+    }
     public function user_data($id) : array
     {
         $user = $this -> pdo -> prepare("SELECT * FROM $this->user_table WHERE id = :id");
@@ -121,25 +127,6 @@ class User extends Connect
         } else {
             return '';
         }
-    }
-
-    // check if user is added in today's meal
-    public function is_user_added_in_launch() : bool
-    {
-        $launch = $this -> pdo -> prepare("SELECT launch FROM $this->meal_table WHERE date= :date");
-        $launch -> bindValue('date', $this->today);
-        $launch -> execute();
-        $all_launch = $launch -> fetchColumn();
-        return in_array((int)self::get_user_id(), json_decode($all_launch));
-    }
-
-    public function is_user_added_in_dinner() : bool
-    {
-        $dinner = $this -> pdo -> prepare("SELECT dinner FROM $this->meal_table WHERE date= :date");
-        $dinner -> bindValue('date', $this->today);
-        $dinner -> execute();
-        $dinner_arr = $dinner -> fetchColumn();
-        return in_array((int)self::get_user_id(), json_decode($dinner_arr));
     }
 
 

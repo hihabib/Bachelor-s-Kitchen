@@ -21,10 +21,16 @@ class Connect {
         $date_checker = $this -> pdo -> prepare("SELECT * FROM $this->meal_table WHERE date = :date");
         $date_checker -> bindValue('date', $this -> today);
         $date_checker -> execute();
-
         if(!count($date_checker -> fetchAll(PDO::FETCH_ASSOC))){
-            $insert_meal_date = $this -> pdo -> prepare("INSERT INTO $this->meal_table (date) VALUES(:date)");
+            $insert_meal_date = $this -> pdo -> prepare("INSERT INTO $this->meal_table (date, launch, dinner) VALUES(:date, :launch, :dinner)");
             $insert_meal_date -> bindValue('date', $this -> today);
+
+            //get all User
+            $users = $this -> pdo -> prepare("SELECT id FROM $this->user_table ORDER BY id");
+            $users -> execute();
+            $user_array = $users -> fetchAll(PDO::FETCH_COLUMN);
+            $insert_meal_date -> bindValue('launch', json_encode($user_array));
+            $insert_meal_date -> bindValue('dinner', json_encode($user_array));
             $insert_meal_date -> execute();
         }
 
