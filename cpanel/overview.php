@@ -9,12 +9,18 @@
         </tr>
     </thead>
     <tbody>
+    <?php
+        require_once './vendor/autoload.php';
+        $meal = new \kitchen\Meal();
+        foreach ($meal -> meal_overview() as $user_data) :
+    ?>
         <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td></td>
+            <th scope="row"><?php echo$user_data['id'] ?></th>
+            <td><?php echo$user_data['username'] ?></td>
+            <td><?php echo$user_data['launch'] ?></td>
+            <td><?php echo$user_data['dinner'] ?></td>
+            <td><?php echo$user_data['total'] ?></td>
         </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>
