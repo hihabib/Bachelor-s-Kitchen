@@ -5,37 +5,32 @@ use PDO;
 
 class Meal extends Connect
 {
-    public function get_todays_launch() : array
+    public function get_todays_meal($name) : array
     {
-        $launch = $this -> pdo -> prepare("SELECT launch FROM $this->meal_table WHERE date= :date");
-        $launch -> bindValue('date', $this->today);
-        $launch -> execute();
-        return json_decode($launch -> fetchColumn());
+        $meal = $this -> pdo -> prepare("SELECT $name FROM $this->meal_table WHERE date= :date");
+        $meal -> bindValue('date', $this->today);
+        $meal -> execute();
+        return json_decode($meal -> fetchColumn());
     }
 
-    public function get_todays_dinner() : array
-    {
-        $dinner = $this -> pdo -> prepare("SELECT dinner FROM $this->meal_table WHERE date= :date");
-        $dinner -> bindValue('date', $this->today);
-        $dinner -> execute();
-        return json_decode($dinner -> fetchColumn());
-    }
+
+
     // check if user is added in today's meal
-    public function is_user_added_in_todays_launch() : bool
-    {
-        $all_launch = $this->get_todays_launch();
-        return in_array((int)User::get_user_id(), $all_launch);
-    }
-
-    public function is_user_added_in_todays_dinner() : bool
-    {
-        $all_dinner = $this->get_todays_dinner();
-        return in_array(User::get_user_id(), $all_dinner);
-    }
+//    public function is_user_added_in_todays_launch() : bool
+//    {
+//        $all_launch = $this->get_todays_meal('launch');
+//        return in_array((int)User::get_user_id(), $all_launch);
+//    }
+//
+//    public function is_user_added_in_todays_dinner() : bool
+//    {
+//        $all_dinner = $this->get_todays_meal('dinner');
+//        return in_array(User::get_user_id(), $all_dinner);
+//    }
     // add from meal
     public function add_user_to_launch() : void
     {
-        $all_launch = $this->get_todays_launch();
+        $all_launch = $this->get_todays_meal('launch');
         $all_launch[] = User::get_user_id();
         $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET launch = :launch WHERE date = :date");
         $launch->bindValue('launch', json_encode($all_launch));
@@ -44,7 +39,7 @@ class Meal extends Connect
     }
     public function add_user_to_dinner() : void
     {
-        $all_dinner = $this->get_todays_dinner();
+        $all_dinner = $this->get_todays_meal('dinner');
         $all_dinner[] = User::get_user_id();
         $dinner = $this -> pdo -> prepare("UPDATE $this->meal_table SET dinner = :dinner WHERE date = :date");
         $dinner->bindValue('dinner', json_encode($all_dinner));
@@ -54,7 +49,7 @@ class Meal extends Connect
     //remove from meal
     public function remove_user_from_launch() : void
     {
-        $all_launch = $this->get_todays_launch();
+        $all_launch = $this->get_todays_meal('launch');
         unset($all_launch[array_search(User::get_user_id(), $all_launch)]);
         $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET launch = :launch WHERE date = :date");
         $launch->bindValue('launch', json_encode($all_launch));
@@ -63,7 +58,7 @@ class Meal extends Connect
     }
     public function remove_user_from_dinner() : void
     {
-        $all_dinner = $this->get_todays_dinner();
+        $all_dinner = $this->get_todays_meal('dinner');
         unset($all_dinner[array_search(User::get_user_id(), $all_dinner)]);
         $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET dinner = :dinner WHERE date = :date");
         $launch->bindValue('dinner', json_encode($all_dinner));
