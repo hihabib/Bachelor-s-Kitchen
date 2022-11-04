@@ -123,6 +123,20 @@ class Meal extends Connect
         // add column to meal table
         $meal_count_management = $this -> pdo -> prepare("ALTER TABLE $this->meal_table ADD $meal_name TEXT");
         $meal_count_management -> execute();
+    }
 
+    public function get_special_meals_days($name) : array
+    {
+        $special_meals = $this -> pdo -> prepare("SELECT day from $this->pricing_table WHERE instead_of = :instead_of");
+        $special_meals -> bindValue('instead_of', Validate::validate_string($name));
+        $special_meals -> execute();
+        return $special_meals -> fetchAll(PDO::FETCH_COLUMN);
+    }
+    public function is_any_special_meal_in($name, $day_name) : bool
+    {
+        if (in_array($day_name, $this->get_special_meals_days($name), true)) {
+            return true;
+        }
+        return false;
     }
 }
