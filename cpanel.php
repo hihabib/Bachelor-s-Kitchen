@@ -14,16 +14,16 @@ if(!count($_GET)){
 <div class="container mt-5">
     <ul class="nav nav-pills">
         <li class="nav-item">
-            <a class="nav-link active" href="?overview">Overview</a>
+            <a class="nav-link <?php echo isset($_GET['overview']) ? 'active' : ''; ?>" href="?overview">Overview</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="?members">Members</a>
+            <a class="nav-link <?php echo isset($_GET['meal']) ? 'active' : ''; ?>" href="?meal">Meal</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="?meal_rates">Meal rates</a>
+            <a class="nav-link <?php echo isset($_GET['members']) ? 'active' : ''; ?>" href="?members">Members</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="?accounts">Accounts</a>
+            <a class="nav-link <?php echo isset($_GET['accounts']) ? 'active' : ''; ?>" href="?accounts">Accounts</a>
         </li>
     </ul>
     <?php
@@ -31,8 +31,8 @@ if(!count($_GET)){
         require_once 'cpanel/overview.php';
     } elseif(isset($_GET['members'])) {
         require_once 'cpanel/members.php';
-    } elseif(isset($_GET['meal_rates'])){
-        require_once 'cpanel/meal_rates.php';
+    } elseif(isset($_GET['meal'])){
+        require_once 'cpanel/meal.php';
     } elseif(isset($_GET['accounts'])){
         require_once 'cpanel/accounts.php';
     }

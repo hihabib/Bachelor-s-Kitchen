@@ -8,6 +8,7 @@ class Connect {
     protected string $dbname;
     protected string $user_table;
     protected string $meal_table;
+    protected string $pricing_table;
     protected string $today;
     public function __construct() {
         date_default_timezone_set("Asia/Dhaka");
@@ -16,6 +17,7 @@ class Connect {
         $this -> pdo = new PDO("mysql:host=localhost;dbname=$this->dbname", "root", "root");
         $this->pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this -> meal_table = Config::$meal_table;
+        $this -> pricing_table = Config::$pricing_table;
 
         // insert current date in meal table of db
         $this -> today = date('Y-m-d 0:0:0');

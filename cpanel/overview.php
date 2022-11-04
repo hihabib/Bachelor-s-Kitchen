@@ -10,16 +10,19 @@
     </thead>
     <tbody>
     <?php
-        require_once './vendor/autoload.php';
-        $meal = new \kitchen\Meal();
-        foreach ($meal -> meal_overview() as $user_data) :
+    require_once './vendor/autoload.php';
+
+    use kitchen\Meal;
+
+    $meal = new Meal();
+    foreach ($meal -> meal_overview() as $user_data) :
     ?>
         <tr>
             <th scope="row"><?php echo$user_data['id'] ?></th>
-            <td><?php echo$user_data['username'] ?></td>
-            <td><?php echo$user_data['launch'] ?></td>
-            <td><?php echo$user_data['dinner'] ?></td>
-            <td><?php echo$user_data['total'] ?></td>
+            <td><?php echo $user_data['username'] ?></td>
+            <td><?php echo $user_data['launch'] ?></td>
+            <td><?php echo $user_data['dinner'] ?></td>
+            <td><?php echo $user_data['total'] ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

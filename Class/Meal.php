@@ -103,7 +103,26 @@ class Meal extends Connect
             $overview_single['total'] = $overview_single['launch'] + $overview_single['dinner'];
             $overview[] = $overview_single;
         }
-
         return $overview;
+    }
+
+    public function add_special_meal($data) : void
+    {
+        $meal_name = Validate::validate_string($data['special_meal_name']);
+        $meal_day = Validate::validate_string($data['day']);
+        $meal_instead_of = Validate::validate_string($data['instead_of']);
+        $meal_price = (int)Validate::validate_string($data['special_meal_price']);
+        // add data to pricing table
+        $meal_rate_management = $this -> pdo -> prepare("INSERT INTO $this->pricing_table(name, price, day, instead_of) VALUES(:name, :price, :day, :instead_of)");
+        $meal_rate_management -> bindValue('name', $meal_name );
+        $meal_rate_management -> bindValue('price', $meal_price );
+        $meal_rate_management -> bindValue('day', $meal_day );
+        $meal_rate_management -> bindValue('instead_of', $meal_instead_of );
+        $meal_rate_management -> execute();
+
+        // add column to meal table
+        $meal_count_management = $this -> pdo -> prepare("ALTER TABLE $this->meal_table ADD $meal_name TEXT");
+        $meal_count_management -> execute();
+
     }
 }
