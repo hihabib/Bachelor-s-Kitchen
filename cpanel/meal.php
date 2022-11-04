@@ -13,9 +13,10 @@ if(count($_GET) === 1) {
     </div>
 </div>
 <?php
-if(isset($_GET['add_new'])){
-    require_once './cpanel/meal-options/add-special-meal.php';
 
-}
+isset($_GET['add_new']) && require_once './cpanel/meal-options/add-special-meal.php';
+isset($_GET['edit']) && require_once './cpanel/meal-options/edit-meal.php';
+
+
 
 ?>

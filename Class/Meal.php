@@ -28,42 +28,24 @@ class Meal extends Connect
 //        return in_array(User::get_user_id(), $all_dinner);
 //    }
     // add from meal
-    public function add_user_to_launch() : void
+    public function add_user_to_meal($name) : void
     {
-        $all_launch = $this->get_todays_meal('launch');
-        $all_launch[] = User::get_user_id();
-        $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET launch = :launch WHERE date = :date");
-        $launch->bindValue('launch', json_encode($all_launch));
-        $launch->bindValue('date', $this -> today);
-        $launch->execute();
-    }
-    public function add_user_to_dinner() : void
-    {
-        $all_dinner = $this->get_todays_meal('dinner');
-        $all_dinner[] = User::get_user_id();
-        $dinner = $this -> pdo -> prepare("UPDATE $this->meal_table SET dinner = :dinner WHERE date = :date");
-        $dinner->bindValue('dinner', json_encode($all_dinner));
-        $dinner->bindValue('date', $this -> today);
-        $dinner->execute();
+        $all_meal = $this->get_todays_meal($name);
+        $all_meal[] = User::get_user_id();
+        $meal = $this -> pdo -> prepare("UPDATE $this->meal_table SET $name = :meal WHERE date = :date");
+        $meal->bindValue('meal', json_encode($all_meal));
+        $meal->bindValue('date', $this -> today);
+        $meal->execute();
     }
     //remove from meal
-    public function remove_user_from_launch() : void
+    public function remove_user_from_meal($name) : void
     {
-        $all_launch = $this->get_todays_meal('launch');
-        unset($all_launch[array_search(User::get_user_id(), $all_launch)]);
-        $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET launch = :launch WHERE date = :date");
-        $launch->bindValue('launch', json_encode($all_launch));
-        $launch->bindValue('date', $this -> today);
-        $launch->execute();
-    }
-    public function remove_user_from_dinner() : void
-    {
-        $all_dinner = $this->get_todays_meal('dinner');
-        unset($all_dinner[array_search(User::get_user_id(), $all_dinner)]);
-        $launch = $this -> pdo -> prepare("UPDATE $this->meal_table SET dinner = :dinner WHERE date = :date");
-        $launch->bindValue('dinner', json_encode($all_dinner));
-        $launch->bindValue('date', $this -> today);
-        $launch->execute();
+        $all_meal = $this->get_todays_meal($name);
+        unset($all_meal[array_search(User::get_user_id(), $all_meal)]);
+        $meal = $this -> pdo -> prepare("UPDATE $this->meal_table SET $name = :meal WHERE date = :date");
+        $meal->bindValue('meal', json_encode($all_meal));
+        $meal->bindValue('date', $this -> today);
+        $meal->execute();
     }
     public function count_total_meal($id, $name) : int
     {
@@ -120,6 +102,28 @@ class Meal extends Connect
         $meal_count_management -> execute();
     }
 
+    public function edit_meal($data) : void
+    {
+        $meal_name = Validate::validate_string($data['special_meal_name']);
+        $meal_day = Validate::validate_string($data['day']);
+        $meal_instead_of = Validate::validate_string($data['instead_of']);
+        $meal_price = (int)Validate::validate_string($data['special_meal_price']);
+        $id = (int)Validate::validate_string($data['id']);
+        // add data to pricing table
+        $meal_rate_management = $this -> pdo -> prepare("UPDATE $this->pricing_table SET name = :name, price = :price, day = :day, instead_of = :instead_of WHERE id = :id");
+        $meal_rate_management -> bindValue('name', $meal_name );
+        $meal_rate_management -> bindValue('price', $meal_price );
+        $meal_rate_management -> bindValue('day', $meal_day );
+        $meal_rate_management -> bindValue('instead_of', $meal_instead_of );
+        $meal_rate_management -> bindValue('id', $id );
+        $meal_rate_management -> execute();
+
+        // rename column of meal table
+        $old_column_name = Validate::validate_string($data['special_meal_old_name']);
+        $meal_count_management = $this -> pdo -> prepare("ALTER TABLE $this->meal_table RENAME COLUMN $old_column_name TO $meal_name");
+        $meal_count_management -> execute();
+    }
+
     public function get_special_meals_days($name) : array
     {
         $special_meals = $this -> pdo -> prepare("SELECT day from $this->pricing_table WHERE instead_of = :instead_of");
@@ -133,5 +137,19 @@ class Meal extends Connect
             return true;
         }
         return false;
+    }
+    public function get_all_meal_arr() : array
+    {
+        $meals = $this -> pdo -> prepare("SELECT name FROM $this->pricing_table");
+        $meals -> execute();
+        return $meals -> fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function get_meal_schema($meal_name):array
+    {
+        $schema_data = $this -> pdo -> prepare("SELECT * FROM $this->pricing_table WHERE name = :name");
+        $schema_data -> bindValue('name', Validate::validate_string($meal_name));
+        $schema_data -> execute();
+        return $schema_data -> fetchAll(PDO::FETCH_ASSOC);
     }
 }

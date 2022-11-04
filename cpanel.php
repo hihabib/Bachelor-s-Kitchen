@@ -1,7 +1,10 @@
 <?php
+
 require_once './header.php';
 
-$validate = new \kitchen\Validate();
+use kitchen\Validate;
+
+$validate = new Validate();
 
 if(!$validate->is_admin()){
     header("Location: /");

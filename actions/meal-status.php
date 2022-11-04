@@ -7,25 +7,25 @@ $meal = new Meal();
 
 // update user launch status
 if(isset($_POST['launch'])) {
-    if(!in_array(User::get_user_id(), $meal -> get_todays_launch())){
-        $meal -> add_user_to_launch();
+    if(!in_array(User::get_user_id(), $meal -> get_todays_meal('launch'))){
+        $meal -> add_user_to_meal('launch');
     }
 }
 else {
-    if(in_array(User::get_user_id(), $meal -> get_todays_launch())){
-        $meal -> remove_user_from_launch();
+    if(in_array(User::get_user_id(), $meal -> get_todays_meal('launch'))){
+        $meal -> remove_user_from_meal('launch');
     }
 }
 
 // update user dinner status
 if(isset($_POST['dinner'])){
-    if(!in_array(User::get_user_id(), $meal -> get_todays_dinner())){
-        $meal -> add_user_to_dinner();
+    if(!in_array(User::get_user_id(), $meal -> get_todays_meal('dinner'))){
+        $meal -> add_user_to_meal('dinner');
     }
 }
 else {
-    if(in_array(User::get_user_id(), $meal -> get_todays_dinner())){
-        $meal -> remove_user_from_dinner();
+    if(in_array(User::get_user_id(), $meal -> get_todays_meal('dinner'))){
+        $meal -> remove_user_from_meal('dinner');
     }
 }
 header("Location: /dashboard.php");

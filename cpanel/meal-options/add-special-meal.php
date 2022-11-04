@@ -22,6 +22,7 @@
     <div class="mb-3">
         <label for="special_day">Select Special Meal day</label>
         <select name="day" id="special_day" class="form-select">
+            <option value="All">All</option>
             <option value="Sat">Saturday</option>
             <option value="Sun">Sunday</option>
             <option value="Mon">Monday</option>
