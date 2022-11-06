@@ -15,12 +15,18 @@ if(isset($_POST['meal_to_edit'])){
 }
 
 if(isset($_POST)){
-    if(count(explode(" ", $_POST['special_meal_name'])) === 1
-        && count(explode(" ", $_POST['special_meal_old_name'])) === 1){
-        $meal->edit_meal($_POST);
-        header("Location: /cpanel.php?meal&edit&edit=success");
+    if(!isset($_POST['delete_meal'])){
+        if(count(explode(" ", $_POST['special_meal_name'] ?? $_POST['meal_old_name'])) === 1
+            && count(explode(" ", $_POST['special_meal_old_name'] ?? $_POST['meal_old_name'])) === 1){
+            $meal->edit_meal($_POST);
+            header("Location: /cpanel.php?meal&edit=success");
+        } else {
+            header("Location: /cpanel.php?meal&edit&error=Space%20is%20not%20allowed%20in%20meal%20name");
+        }
     } else {
-        header("Location: /cpanel.php?meal&edit&error=Space%20is%20not%20allowed%20in%20meal%20name");
+        // delete meal
+        $meal -> delete_meal($_POST['meal_old_name']);
+        header("Location: /cpanel.php?meal&edit=deleted");
     }
 } else {
     header("Location: /cpanel.php?meal&edit");

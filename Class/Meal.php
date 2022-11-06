@@ -104,7 +104,7 @@ class Meal extends Connect
 
     public function edit_meal($data) : void
     {
-        $meal_name = Validate::validate_string($data['special_meal_name']);
+        $meal_name = $data['special_meal_name'] ? Validate::validate_string($data['special_meal_name']) : Validate::validate_string($data['meal_old_name']);
         $meal_day = Validate::validate_string($data['day']);
         $meal_instead_of = Validate::validate_string($data['instead_of']);
         $meal_price = (int)Validate::validate_string($data['special_meal_price']);
@@ -119,7 +119,7 @@ class Meal extends Connect
         $meal_rate_management -> execute();
 
         // rename column of meal table
-        $old_column_name = Validate::validate_string($data['special_meal_old_name']);
+        $old_column_name = $data['special_meal_old_name'] ? Validate::validate_string($data['special_meal_old_name']) : $data['meal_old_name'];
         $meal_count_management = $this -> pdo -> prepare("ALTER TABLE $this->meal_table RENAME COLUMN $old_column_name TO $meal_name");
         $meal_count_management -> execute();
     }
@@ -151,5 +151,19 @@ class Meal extends Connect
         $schema_data -> bindValue('name', Validate::validate_string($meal_name));
         $schema_data -> execute();
         return $schema_data -> fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function delete_meal($column) : void
+    {
+        $column_name = Validate::validate_string($column);
+
+        // Delete from pricing table
+        $delete_from_pricing = $this -> pdo -> prepare("DELETE FROM $this->pricing_table WHERE name = :meal_name");
+        $delete_from_pricing -> bindValue('meal_name', $column_name);
+        $delete_from_pricing -> execute();
+
+        // Delete from meal table
+        $delete_from_meal = $this -> pdo -> prepare("ALTER TABLE $this->meal_table DROP COLUMN $column_name");
+        $delete_from_meal -> execute();
     }
 }
